@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:BuildHouseApp.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:BuildHouseApp"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
+             x:Class="BuildHouseApp.Views.ConstructionView"
+             x:DataType="vm:ConstructionViewModel">
+    
+    
+    <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="10">
+        <StackPanel Spacing="10">
+            <TextBlock Text="{Binding StatusMessage}" FontWeight="Bold" TextWrapping="Wrap"/>
+            
+            <Button Content="Start Construction" 
+                    Command="{Binding StartConstructionCommand}"
+                    IsEnabled="{Binding !IsConstructionInProgress}"/>
+            
+            <Button Content="Deliver Materials" 
+                    Command="{Binding DeliverMaterialsCommand}"
+                    IsVisible="{Binding MaterialsNeeded}"/>
+            
+            <Button Content="Repair Equipment" 
+                    Command="{Binding RepairEquipmentCommand}"/>
+            
+            <ProgressBar Minimum="0" Maximum="100" Height="20" 
+                        Value="{Binding HouseProgress, Mode=OneWay}"/>
+            
+            <TextBlock Text="Equipment Status:" FontWeight="Bold"/>
+            <ItemsControl ItemsSource="{Binding Equipment}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding IsOperational, StringFormat='Status: {0}'}"
+               Foreground="{Binding IsOperational, 
+                       Converter={StaticResource BoolToColorConverter}}"/>
+    
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+            <TextBlock Text="Activity Log:" FontWeight="Bold"/>
+            <ListBox ItemsSource="{Binding ActivityLog}" Height="200"/>
+        </StackPanel>
+    </Border>
+</UserControl>
